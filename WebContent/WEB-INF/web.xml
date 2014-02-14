@@ -9,4 +9,19 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description>xxxxx</description>
+    <display-name>GetFeeds</display-name>
+    <servlet-name>GetFeeds</servlet-name>
+    <servlet-class>com.shuai.hehe.GetFeeds</servlet-class>
+    <init-param>
+      <description>yyy</description>
+      <param-name>mId</param-name>
+      <param-value>1</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetFeeds</servlet-name>
+    <url-pattern>/getfeeds</url-pattern>
+  </servlet-mapping>
 </web-app>
