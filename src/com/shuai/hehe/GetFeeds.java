@@ -1,7 +1,6 @@
 package com.shuai.hehe;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.shuai.hehe.data.Constant;
 import com.shuai.hehe.data.Feed;
 
 /**
@@ -24,7 +24,8 @@ import com.shuai.hehe.data.Feed;
  */
 public class GetFeeds extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int DefaultCount=20;
+	private static final int DEFAULT_PAGE_COUNT=20;
+	private static final int MAX_PAGE_COUNT=100;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -67,7 +68,7 @@ public class GetFeeds extends HttpServlet {
 	
 	private Connection getConnection() throws SQLException{
 		//String path=getServletContext().getRealPath("hehe.db");
-		String path="D:/mycode/hehe.db";
+		String path=Constant.DB_PATH;
 		Connection connection = DriverManager.getConnection("jdbc:sqlite:"+path);
 		return connection;
 	}
@@ -114,15 +115,21 @@ public class GetFeeds extends HttpServlet {
 			return;
 		}
 		
+		int maxTime=(int) (System.currentTimeMillis()/1000+10);
+		if(showTime>maxTime)
+			showTime=maxTime;
+		
 		String countString=request.getParameter("count");
-		int count=DefaultCount;
+		int count=DEFAULT_PAGE_COUNT;
 		try{
 			count=Integer.parseInt(countString);
 		}catch(NumberFormatException ex){
 			
-		}
-		
+		}		
 		//检查count
+		if(count>MAX_PAGE_COUNT)
+			count=MAX_PAGE_COUNT;
+		
 		try {
 			String where;
 			if(showTime==-1){

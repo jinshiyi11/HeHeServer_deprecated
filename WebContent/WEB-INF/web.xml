@@ -24,4 +24,24 @@
     <servlet-name>GetFeeds</servlet-name>
     <url-pattern>/getfeeds</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddFeed</display-name>
+    <servlet-name>AddFeed</servlet-name>
+    <servlet-class>com.shuai.hehe.AddFeed</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddFeed</servlet-name>
+    <url-pattern>/addfeed</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>InitEnv</display-name>
+    <servlet-name>InitEnv</servlet-name>
+    <servlet-class>com.shuai.hehe.InitEnv</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InitEnv</servlet-name>
+    <url-pattern>/initenv</url-pattern>
+  </servlet-mapping>
 </web-app>
