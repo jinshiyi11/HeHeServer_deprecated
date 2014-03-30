@@ -22,7 +22,6 @@ public class InitEnv extends HttpServlet {
      */
     public InitEnv() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -46,7 +45,8 @@ public class InitEnv extends HttpServlet {
 		}
 		
 		try {
-			DataManager.createDb();
+			DataManager dataManager=new DataManager();
+			dataManager.createDb();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

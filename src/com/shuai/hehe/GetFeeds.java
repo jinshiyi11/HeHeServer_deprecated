@@ -1,12 +1,12 @@
 package com.shuai.hehe;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.shuai.hehe.data.Constant;
+import com.shuai.hehe.data.DataManager;
 import com.shuai.hehe.data.Feed;
 
 /**
@@ -26,13 +26,14 @@ public class GetFeeds extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_PAGE_COUNT=20;
 	private static final int MAX_PAGE_COUNT=100;
+	
+	private DataManager mDataManager;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public GetFeeds() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -41,48 +42,14 @@ public class GetFeeds extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		
-		try {
-			Class.forName("org.sqlite.JDBC");
-			
-			initDb();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		mDataManager=new DataManager();
 	}
 
 	/**
 	 * @see Servlet#destroy()
 	 */
 	public void destroy() {
-	}
-	
-	private void initDb(){
-		try {
-			Connection connection=getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private Connection getConnection() throws SQLException{
-		//String path=getServletContext().getRealPath("hehe.db");
-		String path=Constant.DB_PATH;
-		Connection connection = DriverManager.getConnection("jdbc:sqlite:"+path);
-		return connection;
-	}
-	
-	private void closeConnection(Connection connection){
-		try {
-			if (connection != null){
-				connection.close();
-//				connection=null;
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 
 	/**
@@ -102,74 +69,50 @@ public class GetFeeds extends HttpServlet {
 	private void getData(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		response.setContentType("text/html; charset=UTF-8");
 		String idStr=request.getParameter("t");		
-		int showTime=-1;
+		Date showTime;
 		try{
-			showTime=Integer.parseInt(idStr);
-		}catch(NumberFormatException ex){
-			
-		}
-		
-		//检查数据的有效性
-		if(showTime<-1){
-			//TODO:log it
+			DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if(idStr!=null)
+				showTime=dateFormat.parse(idStr);
+			else {
+				//允许该参数不存在
+				showTime=new Date();
+			}
+		}catch (ParseException e) {
+			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
-		int maxTime=(int) (System.currentTimeMillis()/1000+10);
-		if(showTime>maxTime)
+		//检查数据的有效性
+		Date maxTime=new Date(System.currentTimeMillis()/1000+10);
+		if(showTime.after(maxTime))
 			showTime=maxTime;
 		
-		String countString=request.getParameter("count");
-		int count=DEFAULT_PAGE_COUNT;
-		try{
-			count=Integer.parseInt(countString);
-		}catch(NumberFormatException ex){
-			
-		}		
+		String countString = request.getParameter("count");
+		int count = DEFAULT_PAGE_COUNT;
+		try {
+			//允许该参数不存在
+			if (countString != null)
+				count = Integer.parseInt(countString);
+		} catch (NumberFormatException ex) {
+			ex.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}	
 		//检查count
 		if(count>MAX_PAGE_COUNT)
 			count=MAX_PAGE_COUNT;
+		else if(count<MAX_PAGE_COUNT*-1)
+			count=MAX_PAGE_COUNT*-1;
 		
 		try {
-			String where;
-			if(showTime==-1){
-				where="";
-			}else{
-				if(count>0){
-					where="WHERE show_time>"+showTime;
-				}else{
-					where="WHERE show_time<"+showTime;
-				}
-			}
-			
-			Connection connection = getConnection();
-			//String sql="SELECT id,type,title,content,[from],insert_time,show_time FROM hot_feed "+where+" ORDER BY show_time DESC LIMIT ? ";
-			
-			String sql="SELECT id,type,title,content,[from],insert_time FROM hot_feed "+where+" LIMIT ? ";
-			
-			PreparedStatement statement = connection.prepareStatement(sql);
-			statement.setInt(1, count>0?count:-count);
-			statement.execute();
-			ResultSet resultSet = statement.getResultSet();
-			
-			ArrayList<Feed> feeds=new ArrayList<Feed>();
-			while(resultSet.next()){
-				Feed feed=new Feed();
-				
-				int index=1;
-				feed.mId=resultSet.getInt(index++);
-				feed.mType=resultSet.getInt(index++);
-				feed.mTitle=resultSet.getString(index++);
-				feed.mContent=resultSet.getString(index++);
-				feed.mFrom=resultSet.getInt(index++);
-				feeds.add(feed);
-			}
-			
+			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,count);
 			Gson gson=new Gson();
 			response.getWriter().write(gson.toJson(feeds));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			e.printStackTrace(response.getWriter());
 		}
 		
 		//response.getWriter().print("xxxx");

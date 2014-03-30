@@ -1,21 +1,60 @@
 package com.shuai.hehe.data;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class DataManager {
 	
-	public static Connection getConnection() throws SQLException{
-		String path=Constant.DB_PATH;
-		Connection connection = DriverManager.getConnection("jdbc:sqlite:"+path);
+	private boolean debug=true;
+	
+	private String mDbName;
+	private String mDbUserName;
+	private String mDbPassword;
+	private String mDbHost;
+	private int mDbPort;
+	
+	private static String mDriverName="com.mysql.jdbc.Driver";//"org.sqlite.JDBC"
+	
+	{
+		if (debug) {
+			mDbName = "hehe";
+			mDbUserName="hot_feed_user";
+			mDbPassword="test";
+			mDbHost="localhost";
+			mDbPort=3306;
+		}else{
+			
+		}
+		
+	}
+	
+	public DataManager(){
+		try {
+			Class.forName(mDriverName);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
+	
+	public Connection getConnection() throws SQLException{
+//		String path=Constant.DB_PATH;
+//		Connection connection = DriverManager.getConnection("jdbc:sqlite:"+path);
+		
+		String connectionString=String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s", mDbHost,mDbPort,mDbName,mDbUserName,mDbPassword);
+		Connection connection = DriverManager.getConnection(connectionString);
 		
 		return connection;
 	}
 	
-	public static void closeConnection(Connection connection){
+	public void closeConnection(Connection connection){
 		try {
 			if (connection != null){
 				connection.close();
@@ -32,33 +71,29 @@ public class DataManager {
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public static void createDb() throws SQLException, ClassNotFoundException{
-		Class.forName("org.sqlite.JDBC");
-		
-		File file=new File("/data1/jetty_work/592/hehe1/sqlite-3.8.2-amd64-libsqlitejdbc.so");
-		file.setExecutable(true);
+	public void createDb() throws SQLException, ClassNotFoundException{
+		//Class.forName("org.sqlite.JDBC");
 
 		Connection connection=null;
 		Statement statement=null;
 		connection=getConnection();
 		
 		String[] sqls={
-				"CREATE TABLE IF NOT EXISTS hot_feed(id INTEGER PRIMARY KEY," +
-						"type INTEGER,title TEXT UNIQUE NOT NULL," +
+				"CREATE TABLE IF NOT EXISTS hot_feed(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+						"type INT,title VARCHAR(255) NOT NULL UNIQUE," +
 						"content TEXT," +
-						"[from] INTEGER," +
-						"state INTEGER DEFAULT -1," +
-						"insert_time INTEGER DEFAULT (strftime('%s', 'now'))," +
-						"show_time INTEGER DEFAULT 0" +
+						"`from` INT," +
+						"state INT DEFAULT -1," +
+						"insert_time TIMESTAMP DEFAULT  CURRENT_TIMESTAMP()," +
+						"show_time TIMESTAMP DEFAULT 0" +
 						")",
 						
-				"CREATE TABLE IF NOT EXISTS pic(id INTEGER PRIMARY KEY," +
-						"feed_id INTEGER," +
+				"CREATE TABLE IF NOT EXISTS pic(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+						"feed_id INT," +
 						"thumb_url TEXT," +
 						"big_url TEXT," +
 						"description TEXT," +
-						"insert_time INTEGER DEFAULT (strftime('%s', 'now'))," +
-						"show_time INTEGER DEFAULT 0" +
+						"insert_time TIMESTAMP DEFAULT 0"+
 						")"
 						};
 		
@@ -75,7 +110,44 @@ public class DataManager {
 //				statement.execute(sql);				
 //			}
 			
-
+		
+		closeConnection(connection);
+	}
+	
+	public ArrayList<Feed> getFeeds(Date showTime, int count) throws SQLException{
+		ArrayList<Feed> feeds=new ArrayList<Feed>();
+		
+		Connection connection = getConnection();
+		String sql;
+		
+		if(count>0){
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time>? ORDER BY show_time DESC LIMIT ?";
+		}else{
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<? ORDER BY show_time DESC LIMIT ?";
+		}
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		statement.setString(1, simpleDateFormat.format(showTime));
+		statement.setInt(2, Math.abs(count));
+		statement.execute();
+		ResultSet resultSet = statement.getResultSet();
+		
+		while(resultSet.next()){
+			Feed feed=new Feed();
+			
+			int index=1;
+			feed.mId=resultSet.getInt(index++);
+			feed.mType=resultSet.getInt(index++);
+			feed.mTitle=resultSet.getString(index++);
+			feed.mContent=resultSet.getString(index++);
+			feed.mFrom=resultSet.getInt(index++);
+			feeds.add(feed);
+		}
+		
+		closeConnection(connection);	
+		
+		return feeds;
 	}
 
 }
