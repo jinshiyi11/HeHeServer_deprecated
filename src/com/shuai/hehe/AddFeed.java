@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.shuai.hehe.data.Constant;
+import com.shuai.hehe.data.FeedType;
 
 /**
  * Servlet implementation class AddFeed
@@ -28,6 +29,16 @@ public class AddFeed extends HttpServlet {
 		String sessionKey=request.getParameter("key");
 		if (sessionKey == null || !sessionKey.equals(Constant.SESSION_KEY)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+		}
+		
+		
+		int feedType=Integer.parseInt(request.getParameter("feedtype"));
+		switch (feedType) {
+		case FeedType.TYPE_ALBUM:
+			
+			break;
+		default:
+			break;
 		}
 	}
 

@@ -120,10 +120,16 @@ public class DataManager {
 		Connection connection = getConnection();
 		String sql;
 		
+//		if(count>0){
+//			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time>? ORDER BY show_time DESC LIMIT ?";
+//		}else{
+//			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<? ORDER BY show_time DESC LIMIT ?";
+//		}
+		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time>? ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time>? ORDER BY show_time DESC LIMIT ?";
 		}else{
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<? ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time<? ORDER BY show_time DESC LIMIT ?";
 		}
 		
 		PreparedStatement statement = connection.prepareStatement(sql);

@@ -1,7 +1,7 @@
 CREATE DATABASE hehe;
 USE hehe;
 
-CREATE USER 'hot_feed_user'@'localhost' IDENTIFIED BY 'test'
+CREATE USER 'hot_feed_user'@'localhost' IDENTIFIED BY 'test';
 
 GRANT ALL ON hehe.* TO 'hot_feed_user'@'localhost';
 
