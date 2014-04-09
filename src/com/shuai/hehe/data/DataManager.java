@@ -126,8 +126,10 @@ public class DataManager {
 //			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<? ORDER BY show_time DESC LIMIT ?";
 //		}
 		
+		//Date currentDate=new Date();
+		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time>? ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time>? AND insert_time<CURRENT_TIMESTAMP() ORDER BY show_time DESC LIMIT ?";
 		}else{
 			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time<? ORDER BY show_time DESC LIMIT ?";
 		}

@@ -68,24 +68,23 @@ public class GetFeeds extends HttpServlet {
 	
 	private void getData(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		response.setContentType("text/html; charset=UTF-8");
-		String idStr=request.getParameter("t");		
-		Date showTime;
+				
+		Date showTime=new Date();
 		try{
-			DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			if(idStr!=null)
-				showTime=dateFormat.parse(idStr);
-			else {
-				//允许该参数不存在
-				showTime=new Date();
+		    String id=request.getParameter("id");
+			if(id!=null){
+			    long date=Long.parseLong(id);
+			    if(date>0)
+			        showTime=new Date();
 			}
-		}catch (ParseException e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
 		//检查数据的有效性
-		Date maxTime=new Date(System.currentTimeMillis()/1000+10);
+		Date maxTime=new Date(System.currentTimeMillis());
 		if(showTime.after(maxTime))
 			showTime=maxTime;
 		
