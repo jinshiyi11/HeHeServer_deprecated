@@ -1,6 +1,6 @@
 package com.shuai.hehe.data;
 
-public class Constant {
+public class Constants {
 	public static String SESSION_KEY="hehe_shuai";
 	
 	//public static String DB_PATH="D:/mycode/hehe.db";

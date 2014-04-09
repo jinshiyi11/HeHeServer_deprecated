@@ -24,7 +24,7 @@ import com.shuai.hehe.data.Feed;
  */
 public class GetFeeds extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final int DEFAULT_PAGE_COUNT=20;
+	private static final int DEFAULT_PAGE_COUNT=30;
 	private static final int MAX_PAGE_COUNT=100;
 	
 	private DataManager mDataManager;
