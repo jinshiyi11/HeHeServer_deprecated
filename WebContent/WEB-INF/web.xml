@@ -44,4 +44,14 @@
     <servlet-name>InitEnv</servlet-name>
     <url-pattern>/initenv</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetAlbumPics</display-name>
+    <servlet-name>GetAlbumPics</servlet-name>
+    <servlet-class>com.shuai.hehe.GetAlbumPics</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAlbumPics</servlet-name>
+    <url-pattern>/getalbumpics</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -129,9 +129,9 @@ public class DataManager {
 		//Date currentDate=new Date();
 		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time>? AND insert_time<CURRENT_TIMESTAMP() ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_album WHERE insert_time>? AND insert_time<CURRENT_TIMESTAMP() ORDER BY show_time DESC LIMIT ?";
 		}else{
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_video WHERE insert_time<? ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_album WHERE insert_time<? ORDER BY show_time DESC LIMIT ?";
 		}
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
@@ -156,6 +156,36 @@ public class DataManager {
 		closeConnection(connection);	
 		
 		return feeds;
+	}
+	
+	/**
+	 * 获取一条相册新鲜事的所有图片信息
+	 * @param feedId 相册新鲜事id
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<PicInfo> getAlbumPics(int feedId) throws SQLException{
+        ArrayList<PicInfo> result=new ArrayList<PicInfo>();
+        
+        Connection connection = getConnection();
+        String sql="SELECT id,big_url,description FROM hehe.pic WHERE feed_id=?";
+        
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, feedId);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        
+        while(resultSet.next()){
+            PicInfo info=new PicInfo();
+            
+            info.setId(resultSet.getInt("id"));
+            info.setBigPicUrl(resultSet.getString("big_url"));
+            info.setPicDescription(resultSet.getString("description"));
+            result.add(info);
+        }
+        
+        closeConnection(connection);    
+        return result;
 	}
 
 }

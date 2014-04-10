@@ -89,7 +89,7 @@ public class GetFeeds extends HttpServlet {
 			showTime=maxTime;
 		
 		String countString = request.getParameter("count");
-		int count = DEFAULT_PAGE_COUNT;
+		int count = DEFAULT_PAGE_COUNT*-1;
 		try {
 			//允许该参数不存在
 			if (countString != null)
