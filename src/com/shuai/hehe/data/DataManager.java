@@ -129,9 +129,9 @@ public class DataManager {
 		//Date currentDate=new Date();
 		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_album WHERE insert_time>? AND insert_time<CURRENT_TIMESTAMP() ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE insert_time>? AND insert_time<CURRENT_TIMESTAMP() ORDER BY insert_time DESC LIMIT ?";
 		}else{
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_album WHERE insert_time<? ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE insert_time<? ORDER BY insert_time DESC LIMIT ?";
 		}
 		
 		PreparedStatement statement = connection.prepareStatement(sql);

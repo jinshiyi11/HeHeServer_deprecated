@@ -74,8 +74,8 @@ public class GetFeeds extends HttpServlet {
 		    String id=request.getParameter("id");
 			if(id!=null){
 			    long date=Long.parseLong(id);
-			    if(date>0)
-			        showTime=new Date();
+			    if(date>=0)
+			        showTime=new Date(date);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
