@@ -23,17 +23,21 @@ public class DataManager {
 	private static String mDriverName="com.mysql.jdbc.Driver";//"org.sqlite.JDBC"
 	
 	{
-		if (debug) {
-			mDbName = "hehe";
-			mDbUserName="hot_feed_user";
-			mDbPassword="test";
-			mDbHost="localhost";
-			mDbPort=3306;
-		}else{
-			
-		}
-		
-	}
+        if (debug) {
+            mDbName = "hehe";
+            mDbUserName="hot_feed_user";
+            mDbPassword="test";
+            mDbHost="localhost";
+            mDbPort=3306;
+        }else{
+            mDbName = "";
+            mDbUserName="";
+            mDbPassword="";
+            mDbHost="r.rdc.sae.sina.com.cn";
+            mDbPort=3307;
+        }
+        
+    }
 	
 	public DataManager(){
 		try {
@@ -168,7 +172,7 @@ public class DataManager {
         ArrayList<PicInfo> result=new ArrayList<PicInfo>();
         
         Connection connection = getConnection();
-        String sql="SELECT id,big_url,description FROM hehe.pic WHERE feed_id=?";
+        String sql="SELECT id,big_url,description FROM pic WHERE feed_id=?";
         
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, feedId);
