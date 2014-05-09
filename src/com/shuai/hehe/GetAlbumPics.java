@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.shuai.hehe.data.Constants;
 import com.shuai.hehe.data.DataManager;
 import com.shuai.hehe.data.Feed;
 import com.shuai.hehe.data.PicInfo;
@@ -66,6 +67,7 @@ public class GetAlbumPics extends HttpServlet {
         try {
             ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
             Gson gson=new Gson();
+            response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
             response.getWriter().write(gson.toJson(data));
         } catch (SQLException e) {
             //e.printStackTrace();

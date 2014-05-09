@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.shuai.hehe.data.Constants;
 import com.shuai.hehe.data.DataManager;
 import com.shuai.hehe.data.Feed;
 
@@ -68,14 +69,22 @@ public class GetFeeds extends HttpServlet {
 	
 	private void getData(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		response.setContentType("text/html; charset=UTF-8");
+		
+		/**
+		 * 客户端是否应该缓存返回的数据
+		 * 当id<now并且是取老数据时通知客户端缓存数据
+		 */
+		boolean clientShouldCache=false;
 				
 		Date showTime=new Date();
 		try{
 		    String id=request.getParameter("id");
 			if(id!=null){
 			    long date=Long.parseLong(id);
-			    if(date>=0)
+			    if(date>0){
 			        showTime=new Date(date);
+			        clientShouldCache=true;
+			    }
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -105,9 +114,15 @@ public class GetFeeds extends HttpServlet {
 		else if(count<MAX_PAGE_COUNT*-1)
 			count=MAX_PAGE_COUNT*-1;
 		
+		if(count<0){
+		    clientShouldCache=clientShouldCache&&true;
+		}
+		
 		try {
 			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,count);
 			Gson gson=new Gson();
+			if(clientShouldCache)
+			    response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
 			response.getWriter().write(gson.toJson(feeds));
 		} catch (SQLException e) {
 			//e.printStackTrace();
