@@ -58,7 +58,7 @@ public class GetAlbumPics extends HttpServlet {
 	    
         int feedId;
         try {
-            feedId = Integer.parseInt(request.getParameter("feedId"));
+            feedId = Integer.parseInt(request.getParameter("feedid"));
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;

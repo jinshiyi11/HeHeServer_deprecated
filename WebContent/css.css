@@ -1,0 +1,50 @@
+@CHARSET "UTF-8";
+
+.app_icon{
+	display: block;
+	float: left;
+}
+
+.info{
+	display: block;
+	float: right;
+}
+
+.title {
+	color: rgb(51, 51, 51);
+	font-family: 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB',
+		'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 19px;
+	height: 25px;
+	display: block;
+}
+
+.desc {
+	color: rgb(153, 153, 153);
+	display: block;
+	font-family: 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB',
+		'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	height: 20px;
+}
+
+.download {
+	text-decoration: none;
+	background-color: rgb(76, 201, 182);
+	background-image: none;
+	background-origin: padding-box;
+	background-size: auto;
+	color: rgb(255, 255, 255);
+	cursor: auto;
+	display: inline-block;
+	font-family: 'Lantinghei SC', 'Microsoft Yahei', 'Hiragino Sans GB',
+		'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	height: 20px;
+	letter-spacing: 1px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 5px;
+	text-align: center;
+}

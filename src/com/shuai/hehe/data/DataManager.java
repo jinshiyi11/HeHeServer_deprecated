@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class DataManager {
 	
-	private boolean debug=true;
+	private boolean debug=false;
 	
 	private String mDbName;
 	private String mDbUserName;
@@ -30,9 +30,9 @@ public class DataManager {
             mDbHost="localhost";
             mDbPort=3306;
         }else{
-            mDbName = "";
-            mDbUserName="";
-            mDbPassword="";
+            mDbName = "app_hehe1";
+            mDbUserName="n40lkn10zo";
+            mDbPassword="k3zlzxj1w21052j5w2wjj0ly2y1yj5ii3140l433";
             mDbHost="r.rdc.sae.sina.com.cn";
             mDbPort=3307;
         }
@@ -118,7 +118,7 @@ public class DataManager {
 		closeConnection(connection);
 	}
 	
-	public ArrayList<Feed> getFeeds(Date showTime, int count) throws SQLException{
+	public ArrayList<Feed> getFeeds(Date showTime, int count,String version) throws SQLException{
 		ArrayList<Feed> feeds=new ArrayList<Feed>();
 		
 		Connection connection = getConnection();
@@ -133,10 +133,16 @@ public class DataManager {
 		//Date currentDate=new Date();
 		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time>? AND show_time<CURRENT_TIMESTAMP() ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time>? AND show_time<CURRENT_TIMESTAMP()";
 		}else{
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<? ORDER BY show_time DESC LIMIT ?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<?";
 		}
+		
+		if(version==null || version.equals("1.0")){
+		    sql=sql+" AND type="+FeedType.TYPE_ALBUM;
+		}
+		
+		sql=sql+" ORDER BY show_time DESC LIMIT ?";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

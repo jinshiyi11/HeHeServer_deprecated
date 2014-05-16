@@ -118,8 +118,10 @@ public class GetFeeds extends HttpServlet {
 		    clientShouldCache=clientShouldCache&&true;
 		}
 		
+		String version = request.getParameter("ver");
+		
 		try {
-			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,count);
+			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,count,version);
 			Gson gson=new Gson();
 			if(clientShouldCache)
 			    response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
