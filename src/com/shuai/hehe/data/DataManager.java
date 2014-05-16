@@ -30,10 +30,10 @@ public class DataManager {
             mDbHost="localhost";
             mDbPort=3306;
         }else{
-            mDbName = "app_hehe1";
-            mDbUserName="n40lkn10zo";
-            mDbPassword="k3zlzxj1w21052j5w2wjj0ly2y1yj5ii3140l433";
-            mDbHost="r.rdc.sae.sina.com.cn";
+            mDbName = "";
+            mDbUserName="";
+            mDbPassword="";
+            mDbHost="";
             mDbPort=3307;
         }
         
