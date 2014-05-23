@@ -1,4 +1,4 @@
-package com.shuai.hehe.data;
+package com.shuai.hehe.server.data;
 
 public class Constants {
 	public static final String SESSION_KEY="hehe_shuai";

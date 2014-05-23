@@ -1,4 +1,4 @@
-package com.shuai.hehe.data;
+package com.shuai.hehe.server.data;
 
 /**
  * 新鲜事类型

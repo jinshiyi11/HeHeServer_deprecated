@@ -1,4 +1,4 @@
-package com.shuai.hehe;
+package com.shuai.hehe.server;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.shuai.hehe.data.Constants;
-import com.shuai.hehe.data.DataManager;
+import com.shuai.hehe.server.data.Constants;
+import com.shuai.hehe.server.data.DataManager;
 
 /**
  * Servlet implementation class InitEnv

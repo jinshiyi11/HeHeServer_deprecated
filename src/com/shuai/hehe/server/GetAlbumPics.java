@@ -1,4 +1,4 @@
-package com.shuai.hehe;
+package com.shuai.hehe.server;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.shuai.hehe.data.Constants;
-import com.shuai.hehe.data.DataManager;
-import com.shuai.hehe.data.Feed;
-import com.shuai.hehe.data.PicInfo;
+import com.shuai.hehe.server.data.Constants;
+import com.shuai.hehe.server.data.DataManager;
+import com.shuai.hehe.server.data.Feed;
+import com.shuai.hehe.server.data.PicInfo;
 
 /**
  * Servlet implementation class GetAlbumPics
