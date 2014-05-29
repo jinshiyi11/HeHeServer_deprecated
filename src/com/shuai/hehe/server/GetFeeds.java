@@ -116,6 +116,8 @@ public class GetFeeds extends HttpServlet {
 		
 		if(count<0){
 		    clientShouldCache=clientShouldCache&&true;
+		}else{
+		    clientShouldCache=false;
 		}
 		
 		String version = request.getParameter("ver");

@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class DataManager {
 	
-	private boolean debug=false;
+	private boolean debug=true;
 	
 	private String mDbName;
 	private String mDbUserName;
