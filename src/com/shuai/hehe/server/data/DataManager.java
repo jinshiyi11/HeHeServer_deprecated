@@ -30,11 +30,11 @@ public class DataManager {
             mDbHost="localhost";
             mDbPort=3306;
         }else{
-            mDbName = "";
+            mDbName = "sgaiMwvCVZKpEljJSGgT";
             mDbUserName="";
             mDbPassword="";
-            mDbHost="";
-            mDbPort=3307;
+            mDbHost="sqld.duapp.com";
+            mDbPort=4050;
         }
         
     }
@@ -133,9 +133,9 @@ public class DataManager {
 		//Date currentDate=new Date();
 		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time>? AND show_time<CURRENT_TIMESTAMP()";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time>? AND show_time<CURRENT_TIMESTAMP()";
 		}else{
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE show_time<?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time<?";
 		}
 		
 		if(version==null || version.equals("1.0")){
@@ -197,6 +197,15 @@ public class DataManager {
         
         closeConnection(connection);    
         return result;
+	}
+	
+	public void hideFeed(long feedId) throws SQLException{
+		Connection connection = getConnection();
+        String sql="UPDATE hot_feed SET state=0 WHERE id=?";
+        
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setLong(1, feedId);
+        statement.execute();
 	}
 
 }

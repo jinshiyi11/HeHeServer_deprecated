@@ -54,4 +54,14 @@
     <servlet-name>GetAlbumPics</servlet-name>
     <url-pattern>/getalbumpics</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>HideFeed</display-name>
+    <servlet-name>HideFeed</servlet-name>
+    <servlet-class>com.shuai.hehe.server.HideFeed</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HideFeed</servlet-name>
+    <url-pattern>/hidefeed</url-pattern>
+  </servlet-mapping>
 </web-app>

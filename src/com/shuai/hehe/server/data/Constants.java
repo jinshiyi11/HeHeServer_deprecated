@@ -10,4 +10,6 @@ public class Constants {
 	public static final String HTTP_CACHE_CONTROL="Cache-Control";
 	//默认协议数据的缓存时间,7天
 	public static final String HTTP_CACHE_CONTROL_DEFAULT_VALUE="max-age="+7*24*60*60;
+	
+	public static final String ADMIN_KEY="123456";
 }
