@@ -6,3 +6,6 @@ CREATE USER 'hot_feed_user'@'localhost' IDENTIFIED BY 'test';
 GRANT ALL ON hehe.* TO 'hot_feed_user'@'localhost';
 
 CREATE TABLE IF NOT EXISTS hot_album(id INT PRIMARY KEY,type INT,`title` VARCHAR(255) NOT NULL UNIQUE,content TEXT,`from` INT,state INT DEFAULT -1,insert_time TIMESTAMP DEFAULT  CURRENT_TIMESTAMP(),show_time INT DEFAULT 0)
+
+#dump data
+mysqldump --database hehe --user=hot_feed_user --password=test  --skip-triggers --compact --no-create-info --tables hot_feed --where="id<3" > "D:/TEST/TEST.SQL"
