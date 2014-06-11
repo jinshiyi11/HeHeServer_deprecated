@@ -74,7 +74,7 @@ public class GetFeeds extends HttpServlet {
 		 * 客户端是否应该缓存返回的数据
 		 * 当id<now并且是取老数据时通知客户端缓存数据
 		 */
-		boolean clientShouldCache=false;
+//		boolean clientShouldCache=false;
 				
 		Date showTime=new Date();
 		try{
@@ -83,7 +83,7 @@ public class GetFeeds extends HttpServlet {
 			    long date=Long.parseLong(id);
 			    if(date>0){
 			        showTime=new Date(date);
-			        clientShouldCache=true;
+//			        clientShouldCache=true;
 			    }
 			}
 		}catch (Exception e) {
@@ -92,10 +92,17 @@ public class GetFeeds extends HttpServlet {
 			return;
 		}
 		
-		//检查数据的有效性
-		Date maxTime=new Date(System.currentTimeMillis());
-		if(showTime.after(maxTime))
-			showTime=maxTime;
+		boolean isAdmin=false;
+		String adminKey=request.getParameter("admin");
+		if(adminKey!=null && adminKey.equals(Constants.ADMIN_KEY))
+			isAdmin=true;
+		
+		if (!isAdmin) {
+			// 检查数据的有效性
+			Date maxTime = new Date(System.currentTimeMillis());
+			if (showTime.after(maxTime))
+				showTime = maxTime;
+		}
 		
 		String countString = request.getParameter("count");
 		int count = DEFAULT_PAGE_COUNT*-1;
@@ -114,19 +121,19 @@ public class GetFeeds extends HttpServlet {
 		else if(count<MAX_PAGE_COUNT*-1)
 			count=MAX_PAGE_COUNT*-1;
 		
-		if(count<0){
-		    clientShouldCache=clientShouldCache&&true;
-		}else{
-		    clientShouldCache=false;
-		}
-		
+//		if(count<0){
+//		    clientShouldCache=clientShouldCache&&true;
+//		}else{
+//		    clientShouldCache=false;
+//		}
+//		
 		String version = request.getParameter("ver");
 		
 		try {
-			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,count,version);
+			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,isAdmin,count,version);
 			Gson gson=new Gson();
-			if(clientShouldCache)
-			    response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
+//			if(clientShouldCache)
+//			    response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
 			response.getWriter().write(gson.toJson(feeds));
 		} catch (SQLException e) {
 			//e.printStackTrace();

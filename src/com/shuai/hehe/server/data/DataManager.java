@@ -29,7 +29,7 @@ public class DataManager {
             mDbPassword="test";
             mDbHost="localhost";
             mDbPort=3306;
-        }else{
+        }else{          
             mDbName = "sgaiMwvCVZKpEljJSGgT";
             mDbUserName="";
             mDbPassword="";
@@ -118,7 +118,7 @@ public class DataManager {
 		closeConnection(connection);
 	}
 	
-	public ArrayList<Feed> getFeeds(Date showTime, int count,String version) throws SQLException{
+	public ArrayList<Feed> getFeeds(Date showTime,boolean isAdmin, int count,String version) throws SQLException{
 		ArrayList<Feed> feeds=new ArrayList<Feed>();
 		
 		Connection connection = getConnection();
@@ -133,9 +133,9 @@ public class DataManager {
 		//Date currentDate=new Date();
 		
 		if(count>0){
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time>? AND show_time<CURRENT_TIMESTAMP()";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time>? "+(isAdmin?"":" AND show_time<CURRENT_TIMESTAMP() ");
 		}else{
-			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time<?";
+			sql="SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time<? ";
 		}
 		
 		if(version==null || version.equals("1.0")){
