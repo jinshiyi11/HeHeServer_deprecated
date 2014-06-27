@@ -64,4 +64,14 @@
     <servlet-name>HideFeed</servlet-name>
     <url-pattern>/hidefeed</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UpdateShowTime</display-name>
+    <servlet-name>UpdateShowTime</servlet-name>
+    <servlet-class>com.shuai.hehe.server.UpdateShowTime</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateShowTime</servlet-name>
+    <url-pattern>/updateshowtime</url-pattern>
+  </servlet-mapping>
 </web-app>
