@@ -25,6 +25,10 @@ public class Feed {
     private long mShowTime;
     
     //public int mState;
+    /**
+     * 该新鲜事不展示给用户
+     */
+    public static int STATE_HIDDEN=0;
 
     public int getId() {
         return mId;

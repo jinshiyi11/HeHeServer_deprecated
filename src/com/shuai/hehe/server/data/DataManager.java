@@ -37,10 +37,10 @@ public class DataManager {
             mDbPort = 3306;
         } else {
             mDbName = "";
-            mDbUserName = "";
-            mDbPassword = "";
-            mDbHost = "";
-            mDbPort = 4050;
+            mDbUserName="";
+            mDbPassword="";
+            mDbHost="";
+            mDbPort=4050;
         }
 
     }
@@ -242,7 +242,7 @@ public class DataManager {
             writer.println("feedId:" + feedId + " title:" + title + " startTime:" + new Date(startTime));
 
             PreparedStatement prepareStatement = connection.prepareStatement(
-                    "SELECT id FROM hot_feed where show_time>? ORDER BY show_time ASC", ResultSet.TYPE_FORWARD_ONLY,
+                    "SELECT id,state FROM hot_feed where show_time>? ORDER BY show_time ASC", ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_UPDATABLE);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             prepareStatement.setString(1, simpleDateFormat.format(startTime));
@@ -251,6 +251,9 @@ public class DataManager {
             
             PreparedStatement updateStatement=connection.prepareStatement("update hot_feed set show_time=? where id=?");
             while (resultSet.next()) {
+                int feedState=resultSet.getInt("state");
+                if(feedState==Feed.STATE_HIDDEN)
+                    continue;
                 startTime += mShowTimeStep;
 //                resultSet.updateTimestamp("show_time", new Timestamp(startTime));
 //                resultSet.updateRow();
