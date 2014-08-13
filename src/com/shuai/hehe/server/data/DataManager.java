@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,7 +101,8 @@ public class DataManager {
                         + "thumb_url TEXT," + "big_url TEXT," + "description TEXT," + "insert_time TIMESTAMP DEFAULT 0"
                         + ")" };
 
-        //			String[] indexs={"CREATE INDEX IF NOT EXISTS type_title_index ON hot_feed(type,title)"};
+        		String[] indexs={/*"CREATE INDEX IF NOT EXISTS type_title_index ON hot_feed(type,title)",*/
+        		        "CREATE INDEX IF NOT EXISTS pic_feedid_index ON pic (feed_id)"};
 
         statement = connection.createStatement();
         //创建表
@@ -109,9 +111,9 @@ public class DataManager {
         }
 
         //创建索引
-        //			for(String sql:indexs){
-        //				statement.execute(sql);				
-        //			}
+		for(String sql:indexs){
+			statement.execute(sql);				
+		}
 
         closeConnection(connection);
     }
@@ -224,18 +226,21 @@ public class DataManager {
         closeConnection(connection);
     }
 
-    public void updateShowTime(HttpServletResponse response) throws SQLException, IOException {
+    public void updateShowTime(HttpServletResponse response) throws SQLException, IOException, ParseException {
         PrintWriter writer = response.getWriter();
-        long mShowTimeStep = 30 * 60 * 1000;
+        long mShowTimeStep = 60 * 60 * 1000;
 
         Connection connection = getConnection();
         String sql = "SELECT * FROM hot_feed WHERE show_time<CURRENT_TIMESTAMP() ORDER BY show_time DESC LIMIT 1";
 
         PreparedStatement statement = connection.prepareStatement(sql);
         ResultSet rs = statement.executeQuery();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (rs.next()) {
             long feedId = rs.getLong("id");
-            long startTime = rs.getTimestamp("show_time").getTime();
+            //long startTime = rs.getTimestamp("show_time").getTime();
+            
+            long startTime = simpleDateFormat.parse("2014-07-20 00:00:00").getTime();
             String title = rs.getString("title");
             rs.close();
 
@@ -244,8 +249,9 @@ public class DataManager {
             PreparedStatement prepareStatement = connection.prepareStatement(
                     "SELECT id,state FROM hot_feed where show_time>? ORDER BY show_time ASC", ResultSet.TYPE_FORWARD_ONLY,
                     ResultSet.CONCUR_UPDATABLE);
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            prepareStatement.setString(1, simpleDateFormat.format(startTime));
+            
+            //prepareStatement.setString(1, simpleDateFormat.format(startTime));
+            prepareStatement.setString(1, "1900-01-01 00:00:00");
 
             ResultSet resultSet = prepareStatement.executeQuery();
             

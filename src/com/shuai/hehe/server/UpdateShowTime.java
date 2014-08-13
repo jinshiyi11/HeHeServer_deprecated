@@ -2,6 +2,7 @@ package com.shuai.hehe.server;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,6 +49,9 @@ public class UpdateShowTime extends HttpServlet {
             mDataManager.updateShowTime(response);
         } catch (SQLException e) {
             e.printStackTrace(response.getWriter());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 	}
 
