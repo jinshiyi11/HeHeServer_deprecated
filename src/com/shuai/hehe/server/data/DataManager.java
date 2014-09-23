@@ -236,47 +236,48 @@ public class DataManager {
         PreparedStatement statement = connection.prepareStatement(sql);
         ResultSet rs = statement.executeQuery();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        long feedId=0;
+        long startTime=simpleDateFormat.parse("2014-07-20 00:00:00").getTime();
+        String title="";
         if (rs.next()) {
-            long feedId = rs.getLong("id");
-            //long startTime = rs.getTimestamp("show_time").getTime();
+            feedId = rs.getLong("id");
+            startTime = rs.getTimestamp("show_time").getTime();
             
-            long startTime = simpleDateFormat.parse("2014-07-20 00:00:00").getTime();
-            String title = rs.getString("title");
+            title = rs.getString("title");
             rs.close();
+        }
+        writer.println("feedId:" + feedId + " title:" + title + " startTime:" + new Date(startTime));
+        
+        PreparedStatement prepareStatement = connection.prepareStatement(
+                "SELECT id,state FROM hot_feed where id>? ORDER BY id ASC", ResultSet.TYPE_FORWARD_ONLY,
+                ResultSet.CONCUR_UPDATABLE);
+        
+        prepareStatement.setLong(1, feedId);
 
-            writer.println("feedId:" + feedId + " title:" + title + " startTime:" + new Date(startTime));
-
-            PreparedStatement prepareStatement = connection.prepareStatement(
-                    "SELECT id,state FROM hot_feed where show_time>? ORDER BY show_time ASC", ResultSet.TYPE_FORWARD_ONLY,
-                    ResultSet.CONCUR_UPDATABLE);
-            
-            //prepareStatement.setString(1, simpleDateFormat.format(startTime));
-            prepareStatement.setString(1, "1900-01-01 00:00:00");
-
-            ResultSet resultSet = prepareStatement.executeQuery();
-            
-            PreparedStatement updateStatement=connection.prepareStatement("update hot_feed set show_time=? where id=?");
-            while (resultSet.next()) {
-                int feedState=resultSet.getInt("state");
-                if(feedState==Feed.STATE_HIDDEN)
-                    continue;
-                startTime += mShowTimeStep;
+        ResultSet resultSet = prepareStatement.executeQuery();
+        
+        PreparedStatement updateStatement=connection.prepareStatement("update hot_feed set show_time=? where id=?");
+        while (resultSet.next()) {
+            int feedState=resultSet.getInt("state");
+            if(feedState==Feed.STATE_HIDDEN)
+                continue;
+            startTime += mShowTimeStep;
 //                resultSet.updateTimestamp("show_time", new Timestamp(startTime));
 //                resultSet.updateRow();
-                
-                updateStatement.setTimestamp(1, new Timestamp(startTime));
-                updateStatement.setInt(2, resultSet.getInt("id"));
-                updateStatement.executeUpdate();
+            
+            updateStatement.setTimestamp(1, new Timestamp(startTime));
+            updateStatement.setInt(2, resultSet.getInt("id"));
+            updateStatement.executeUpdate();
 
 //                feedId = resultSet.getLong("id");
 //                startTime = resultSet.getTimestamp("show_time").getTime();
 //                title = resultSet.getString("title");
 //
 //                writer.println("feedId:" + feedId + " title:" + title + " startTime:" + new Date(startTime));
-            }
-            resultSet.close();
-
         }
+        resultSet.close();
+        
 
         writer.println("update success");
         closeConnection(connection);
