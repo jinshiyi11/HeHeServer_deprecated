@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
  * 相册中单个图片的信息
  */
 public class PicInfo {
+    /**
+     * 图片id
+     */
     @SerializedName("id")
     private int mId;
     

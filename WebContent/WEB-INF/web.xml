@@ -74,4 +74,14 @@
     <servlet-name>UpdateShowTime</servlet-name>
     <url-pattern>/updateshowtime</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetBlogInfo</display-name>
+    <servlet-name>GetBlogInfo</servlet-name>
+    <servlet-class>com.shuai.hehe.server.GetBlogInfo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetBlogInfo</servlet-name>
+    <url-pattern>/GetBlogInfo</url-pattern>
+  </servlet-mapping>
 </web-app>

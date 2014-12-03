@@ -128,7 +128,7 @@ public class DataManager {
      * @return
      * @throws SQLException
      */
-    public ArrayList<Feed> getFeeds(Date showTime, boolean isAdmin, int count, String version) throws SQLException {
+    public ArrayList<Feed> getFeeds(Date showTime, boolean isAdmin, int count, double version) throws SQLException {
         ArrayList<Feed> feeds = new ArrayList<Feed>();
 
         Connection connection = getConnection();
@@ -149,8 +149,10 @@ public class DataManager {
             sql = "SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time<? ";
         }
 
-        if (version == null || version.equals("1.0")) {
+        if (version<Constants.VERSION_1_1) {
             sql = sql + " AND type=" + FeedType.TYPE_ALBUM;
+        }else if(version<Constants.VERSION_1_3){
+            sql = String.format("%s AND (type=%d or type=%d)",sql,FeedType.TYPE_ALBUM,FeedType.TYPE_VIDEO);
         }
 
         sql = sql + " ORDER BY show_time " + (count < 0 ? " DESC " : " ASC ") + " LIMIT ?";
@@ -181,38 +183,6 @@ public class DataManager {
             Collections.reverse(feeds);
         }
         return feeds;
-    }
-
-    /**
-     * 获取一条相册新鲜事的所有图片信息
-     * 
-     * @param feedId
-     *            相册新鲜事id
-     * @return
-     * @throws SQLException
-     */
-    public ArrayList<PicInfo> getAlbumPics(int feedId) throws SQLException {
-        ArrayList<PicInfo> result = new ArrayList<PicInfo>();
-
-        Connection connection = getConnection();
-        String sql = "SELECT id,big_url,description FROM pic WHERE feed_id=?";
-
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1, feedId);
-        statement.execute();
-        ResultSet resultSet = statement.getResultSet();
-
-        while (resultSet.next()) {
-            PicInfo info = new PicInfo();
-
-            info.setId(resultSet.getInt("id"));
-            info.setBigPicUrl(resultSet.getString("big_url"));
-            info.setPicDescription(resultSet.getString("description"));
-            result.add(info);
-        }
-
-        closeConnection(connection);
-        return result;
     }
 
     public void hideFeed(long feedId) throws SQLException {
@@ -281,6 +251,65 @@ public class DataManager {
 
         writer.println("update success");
         closeConnection(connection);
+    }
+    
+    /**
+     * 获取一条相册新鲜事的所有图片信息
+     * 
+     * @param feedId
+     *            相册新鲜事id
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<PicInfo> getAlbumPics(int feedId) throws SQLException {
+        ArrayList<PicInfo> result = new ArrayList<PicInfo>();
+
+        Connection connection = getConnection();
+        String sql = "SELECT id,big_url,description FROM pic WHERE feed_id=?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, feedId);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+
+        while (resultSet.next()) {
+            PicInfo info = new PicInfo();
+
+            info.setId(resultSet.getInt("id"));
+            info.setBigPicUrl(resultSet.getString("big_url"));
+            info.setPicDescription(resultSet.getString("description"));
+            result.add(info);
+        }
+
+        closeConnection(connection);
+        return result;
+    }
+
+    /**
+     * 获取由feedId指定的日志的信息
+     * @param feedId
+     * @return
+     * @throws SQLException 
+     */
+    public BlogInfo getBlogInfo(int feedId) throws SQLException {
+        BlogInfo result = new BlogInfo();
+
+        Connection connection = getConnection();
+        String sql = "SELECT id,feed_id,html_content FROM blog WHERE feed_id=?";
+
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, feedId);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+
+        while (resultSet.next()) {
+            result.setId(resultSet.getInt("id"));
+            result.setFeedId(resultSet.getInt("feed_id"));
+            result.setHtmlContent(resultSet.getString("html_content"));
+        }
+
+        closeConnection(connection);
+        return result;
     }
 
 }

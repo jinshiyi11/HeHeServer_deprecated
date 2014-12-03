@@ -127,7 +127,10 @@ public class GetFeeds extends HttpServlet {
 //		    clientShouldCache=false;
 //		}
 //		
-		String version = request.getParameter("ver");
+		double version = 0;
+		if(request.getParameter("ver")!=null){
+		    version=Double.valueOf(request.getParameter("ver"));
+		}
 		
 		try {
 			ArrayList<Feed> feeds = mDataManager.getFeeds(showTime,isAdmin,count,version);
