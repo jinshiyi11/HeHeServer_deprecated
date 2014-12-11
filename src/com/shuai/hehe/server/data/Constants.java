@@ -23,5 +23,6 @@ public class Constants {
 	//默认协议数据的缓存时间,7天
 	public static final String HTTP_CACHE_CONTROL_DEFAULT_VALUE="max-age="+7*24*60*60;
 	
-	public static final String ADMIN_KEY="shuai_xx_123456";
+	public static final String ADMIN_KEY="admin";
+	public static final String ADMIN_KEY_VALUE="123456";
 }

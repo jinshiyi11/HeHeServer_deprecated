@@ -39,7 +39,7 @@ public class UpdateShowTime extends HttpServlet {
 	    response.setContentType("text/html; charset=UTF-8");
 	    
 	    String adminKey=request.getParameter("adminkey");
-        if(adminKey==null || !adminKey.equals(Constants.ADMIN_KEY)){
+        if(adminKey==null || !adminKey.equals(Constants.ADMIN_KEY_VALUE)){
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

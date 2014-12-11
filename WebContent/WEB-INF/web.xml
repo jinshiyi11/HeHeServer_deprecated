@@ -76,12 +76,12 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>GetBlogInfo</display-name>
-    <servlet-name>GetBlogInfo</servlet-name>
-    <servlet-class>com.shuai.hehe.server.GetBlogInfo</servlet-class>
+    <display-name>GetBlog</display-name>
+    <servlet-name>GetBlog</servlet-name>
+    <servlet-class>com.shuai.hehe.server.GetBlog</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>GetBlogInfo</servlet-name>
-    <url-pattern>/GetBlogInfo</url-pattern>
+    <servlet-name>GetBlog</servlet-name>
+    <url-pattern>/getblog</url-pattern>
   </servlet-mapping>
 </web-app>

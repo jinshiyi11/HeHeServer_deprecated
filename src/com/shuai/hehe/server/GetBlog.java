@@ -18,7 +18,7 @@ import com.shuai.hehe.server.data.PicInfo;
 /**
  * Servlet implementation class GetBlogContent
  */
-public class GetBlogInfo extends HttpServlet {
+public class GetBlog extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private DataManager mDataManager;
@@ -26,7 +26,7 @@ public class GetBlogInfo extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetBlogInfo() {
+    public GetBlog() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -56,6 +56,7 @@ public class GetBlogInfo extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         
         int feedId;
+        boolean html=true;//是返回html还是饭后json
         try {
             feedId = Integer.parseInt(request.getParameter("feedid"));
         } catch (Exception e) {
@@ -64,10 +65,25 @@ public class GetBlogInfo extends HttpServlet {
         }
         
         try {
+            html = !Boolean.parseBoolean(request.getParameter("json"));
+        } catch (Exception e) {
+        }
+
+        try {
             BlogInfo data = mDataManager.getBlogInfo(feedId);
-            Gson gson=new Gson();
-            response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
-            response.getWriter().write(gson.toJson(data));
+            Gson gson = new Gson();
+            if (html) {
+                String content=data.getHtmlContent();
+                if(content!=null)
+                    response.getWriter().write(content);
+                else {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } else {
+                response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
+                response.getWriter().write(gson.toJson(data));
+            }
+
         } catch (SQLException e) {
             //e.printStackTrace();
             e.printStackTrace(response.getWriter());
