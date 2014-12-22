@@ -52,6 +52,7 @@ public class GetBlog extends HttpServlet {
 	    getBlogInfo(request, response);
 	}
 
+	//TODO:返回的html中包含title
     private void getBlogInfo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html; charset=UTF-8");
         
@@ -74,13 +75,22 @@ public class GetBlog extends HttpServlet {
             Gson gson = new Gson();
             if (html) {
                 String content=data.getHtmlContent();
-                if(content!=null)
+                if(content!=null){
+//                  <html>
+//                  <head>
+//                  <meta charset="utf-8">
+//                  <meta name="viewport" content="width=device-width, user-scalable=no" />
+//                  </head>
+                    response.getWriter().write("<html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /></head>");
                     response.getWriter().write(content);
+                    response.getWriter().write("</body></html>");
+                }
                 else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 }
             } else {
                 response.setHeader(Constants.HTTP_CACHE_CONTROL, Constants.HTTP_CACHE_CONTROL_DEFAULT_VALUE);
+                
                 response.getWriter().write(gson.toJson(data));
             }
 
