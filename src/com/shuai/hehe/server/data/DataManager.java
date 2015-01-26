@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class DataManager {
 
-    private boolean debug = true;
+    private boolean debug = Constants.DEBUG;
 
     private String mDbName;
     private String mDbUserName;

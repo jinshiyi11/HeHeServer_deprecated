@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS hot_album(id INT PRIMARY KEY,type INT,`title` VARCHAR
 
 #dump data
 #sed操作过滤特殊字符，解决导入失败的问题
-mysqldump --database hehe --user=hot_feed_user --password=test  --skip-triggers --compact --no-create-info --tables hot_feed --where="id<3" | sed "s/\\\'/''/g" > "D:/TEST/TEST.SQL"
+mysqldump --database hehe --user=hot_feed_user --password=test --extended-insert --insert-ignore  --skip-triggers --compact --no-create-info --tables hot_feed --where="id<3" | sed "s/\\\'/''/g" > "D:/TEST/feed.sql"
 
 UPDATE hehe.hot_feed set show_time=show_time+INTERVAL 6 Hour where id>240;
 

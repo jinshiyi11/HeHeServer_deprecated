@@ -1,6 +1,8 @@
 package com.shuai.hehe.server.data;
 
 public class Constants {
+	public static boolean DEBUG = false;
+	
 	public static final String SESSION_KEY="hehe_shuai";
 	/**
 	 * 1.0只支持图片新鲜事
