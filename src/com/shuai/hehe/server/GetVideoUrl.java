@@ -112,8 +112,8 @@ FSIZE: "0"
 		}else{
 			//TYPE为CUSTOM
 			String customUrl=json.getString("C");
-			String customData = HttpUtil.getData(url);
-			JSONObject customJson=new JSONObject(data);
+			String customData = HttpUtil.getData(customUrl);
+			JSONObject customJson=new JSONObject(customData);
 			VideoInfo.Part p=new VideoInfo.Part();
 			p.setVideoUrl(customJson.getString("location"));
 			p.setDuration(0);
