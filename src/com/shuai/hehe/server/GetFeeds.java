@@ -93,7 +93,7 @@ public class GetFeeds extends HttpServlet {
 		}
 		
 		boolean isAdmin=false;
-		String adminKey=request.getParameter(Constants.ADMIN_KEY);
+		String adminKey=request.getParameter(Constants.ADMIN_KEY_NAME);
 		if(adminKey!=null && adminKey.equals(Constants.ADMIN_KEY_VALUE))
 			isAdmin=true;
 		

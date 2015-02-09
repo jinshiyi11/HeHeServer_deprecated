@@ -43,7 +43,7 @@ public class HideFeed extends HttpServlet {
 	}
 	
 	private void hideFeed(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String adminKey=request.getParameter(Constants.ADMIN_KEY);
+		String adminKey=request.getParameter(Constants.ADMIN_KEY_NAME);
 		if(adminKey==null || !adminKey.equals(Constants.ADMIN_KEY_VALUE)){
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;

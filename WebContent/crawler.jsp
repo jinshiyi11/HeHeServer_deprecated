@@ -10,16 +10,34 @@
 </head>
 <body>
 
-<%
-CrawlerThread crawlerThread=(CrawlerThread)application.getAttribute(CrawlerThread.Name);
-if(crawlerThread!=null&&crawlerThread.isAlive()){
-	String log=crawlerThread.getLog();
-	out.write(log);
-}else{
-	crawlerThread=new CrawlerThread();
-	application.setAttribute(CrawlerThread.Name, crawlerThread);
-	crawlerThread.start();
+<%!
+public boolean isRunning(ServletContext app){
+	CrawlerThread crawlerThread=(CrawlerThread)app.getAttribute(CrawlerThread.Name);
+	return crawlerThread!=null&&crawlerThread.isAlive();
 }
 %>
+
+<form method="post" action="crawler.jsp">
+<%
+CrawlerThread crawlerThread=(CrawlerThread)application.getAttribute(CrawlerThread.Name);
+String action=request.getParameter("action");
+boolean running=isRunning(application);
+if(action!=null){
+	if(action.equals("start") && !running){
+		crawlerThread=new CrawlerThread();
+		application.setAttribute(CrawlerThread.Name, crawlerThread);
+		crawlerThread.start();
+	}else if(action.equals("stop") && running){
+		//crawlerThread
+	}
+}
+
+if(running){
+%>
+<button name="action" value="stop" onclick="form.submit();"></button>
+<%}else %>
+<button name="action" value="start" onclick="form.submit();"></button>
+</form>
+
 </body>
 </html>

@@ -13,7 +13,7 @@ public class CrawlerThread extends Thread {
 	public static final String Name=CrawlerThread.class.getSimpleName();
 	private String logFilePath;
 	
-	public static String inputStreamToString(Reader in){
+	private static String inputStreamToString(Reader in){
         StringBuilder sb=new StringBuilder();
         
         BufferedReader br = new BufferedReader(in);
@@ -48,10 +48,13 @@ public class CrawlerThread extends Thread {
 		File logFile=null;
 		try{
 			logFile=File.createTempFile(Name, ".hehe");
-			logFile.deleteOnExit();
+			//logFile.deleteOnExit();
 			logFilePath=logFile.getAbsolutePath();
-			
 			FileWriter out=new FileWriter(logFile);
+			out.write(String.format("logFilePath:%1$s</br>",logFilePath));	
+			out.flush();
+			
+			
 			for(int i=0;i<100;i++){
 				out.write("test</br>");	
 				out.flush();
@@ -67,5 +70,7 @@ public class CrawlerThread extends Thread {
 			
 		}
 	}
+	
+	
 
 }

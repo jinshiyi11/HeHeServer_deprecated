@@ -32,7 +32,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>AddFeed</servlet-name>
-    <url-pattern>/addfeed</url-pattern>
+    <url-pattern>/add_feed</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>

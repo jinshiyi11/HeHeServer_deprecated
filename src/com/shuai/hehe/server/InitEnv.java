@@ -12,7 +12,7 @@ import com.shuai.hehe.server.data.Constants;
 import com.shuai.hehe.server.data.DataManager;
 
 /**
- * Servlet implementation class InitEnv
+ * 初始化数据库
  */
 public class InitEnv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -39,8 +39,8 @@ public class InitEnv extends HttpServlet {
 	}
 	
 	private void initEnviroment(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		String sessionKey=request.getParameter("key");
-		if (sessionKey == null || !sessionKey.equals(Constants.SESSION_KEY)) {
+		String sessionKey=request.getParameter(Constants.ADMIN_KEY_NAME);
+		if (sessionKey == null || !sessionKey.equals(Constants.ADMIN_KEY_VALUE)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 		}
 		

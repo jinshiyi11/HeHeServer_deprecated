@@ -3,7 +3,6 @@ package com.shuai.hehe.server.data;
 public class Constants {
 	public static boolean DEBUG = false;
 	
-	public static final String SESSION_KEY="hehe_shuai";
 	/**
 	 * 1.0只支持图片新鲜事
 	 */
@@ -25,6 +24,6 @@ public class Constants {
 	//默认协议数据的缓存时间,7天
 	public static final String HTTP_CACHE_CONTROL_DEFAULT_VALUE="max-age="+7*24*60*60;
 	
-	public static final String ADMIN_KEY="admin";
-	public static final String ADMIN_KEY_VALUE="123456";
+	public static final String ADMIN_KEY_NAME="admin";
+	public static final String ADMIN_KEY_VALUE="";
 }
