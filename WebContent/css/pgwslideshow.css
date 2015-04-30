@@ -8,6 +8,7 @@
  */
 .pgwSlideshow {
     width: 100%;
+    height:100%;
     background: #333;
     display: none;
 }
@@ -21,6 +22,11 @@
     position: relative;
     min-height: 150px;
     overflow: hidden;
+}
+
+.pgwSlideshow .ps-current > ul {
+	padding:0;
+	margin:0;
 }
 
 .pgwSlideshow .ps-current > ul  > li {

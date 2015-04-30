@@ -86,6 +86,7 @@
         // Update the current height
         var updateHeight = function(height, animate) {
 
+        	height=document.body.clientHeight;
             // Check maxHeight
             if (pgwSlideshow.config.maxHeight) {
                 if (height + pgwSlideshow.plugin.find('.ps-list').height() > pgwSlideshow.config.maxHeight) {
@@ -221,9 +222,9 @@
                 var currentElement = $('<li class="elt_' + elementId + '"></li>');
 
                 if (element.image) {
-                    currentElement.html('<img src="' + element.image + '" alt="' + (element.title ? element.title : '') + '">');
+                    currentElement.html('<img src="' + element.image + '" alt="' + (element.title ? element.title : '') + '" onload="onImgLoaded(this)">');
                 } else if (element.thumbnail) {
-                    currentElement.html('<img src="' + element.thumbnail + '" alt="' + (element.title ? element.title : '') + '">');
+                    currentElement.html('<img src="' + element.thumbnail + '" alt="' + (element.title ? element.title : '') + '" onload="onImgLoaded(this)">');
                 }
 
                 if (element.link) {
