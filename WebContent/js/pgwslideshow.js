@@ -329,7 +329,7 @@
             // Element caption
             var elementText = '';
             if (element.title) {
-                elementText += '<b>' + element.title + '</b>';
+                elementText += '<b style="font-size:2em;">' + element.title + '</b>';
             }
 
             if (element.description) {

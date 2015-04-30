@@ -9,10 +9,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="css/pgwslideshow.css">
-<title>呵呵图片</title>
-</head>
-<body style="margin:0;height: 100%;">
-<ul class="pgwSlideshow">
 <%
 DataManager mDataManager=new DataManager();
 int feedId;
@@ -24,9 +20,15 @@ try {
 }
 
 try {
+	Feed feed=mDataManager.getFeed(feedId);
     ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
     for(PicInfo info : data){
 %>
+<title><%=feed.getTitle() %></title>
+</head>
+<body style="margin:0;height: 100%;">
+<ul class="pgwSlideshow">
+
 <li><img src="<%=info.getBigPicUrl() %>" alt="<%=info.getPicDescription() %>"/></li>
 <%   	
     }
