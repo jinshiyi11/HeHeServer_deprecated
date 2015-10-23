@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.shuai.hehe.server.data.*" %>
+<%@ page import="java.util.*"%>
+<%@ page import="com.google.gson.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, user-scalable=no" />
-<link rel="stylesheet" href="css/photoswipe.css"> 
-<link rel="stylesheet" href="css/default-skin/default-skin.css"> 
-<script src="js/photoswipe.min.js"></script> 
-<script src="js/photoswipe-ui-default.min.js"></script> 
+<meta name="viewport" content="width=device-width, user-scalable=no"/>
+<link rel="stylesheet" href="css/photoswipe.css">
+<link rel="stylesheet" href="css/default-skin/default-skin.css">
+<script src="js/photoswipe.min.js"></script>
+<script src="js/photoswipe-ui-default.min.js"></script>
+<script>
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return sParameterName[1];
+        }
+    }
+}​
+</script>
 </head>
 <body>
 
@@ -81,35 +99,63 @@
  <script>
 var openPhotoSwipe = function() {
     var pswpElement = document.querySelectorAll('.pswp')[0];
+    <%!
+    private static class Pic {
+      private String src;
+      private int w;
+      private int h;
+    }
+    %>
+<%
+int feedId;
+try {
+    feedId = Integer.parseInt(request.getParameter("feedid"));
+} catch (Exception e) {
+    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    return;
+}
 
+DataManager mDataManager=new DataManager();
+ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
+ArrayList<Pic> pics=new ArrayList<Pic>();
+for(PicInfo item :data){
+	Pic pic=new Pic();
+	pic.src=item.getBigPicUrl();
+	pics.add(pic);
+}
+
+Gson gson=new Gson();
+out.write("var items ="+gson.toJson(pics));
+%>
+    
     // build items array
-    var items = [
-        {
-            src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
-            w: 0,
-            h: 0
-        },
-        {
-            src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
-            w: 0,
-            h: 0
-        },
-        {
-            src: 'http://f.hiphotos.baidu.com/image/pic/item/64380cd7912397dd1c8f01055b82b2b7d0a28739.jpg',
-            w: 0,
-            h: 0
-        },
-        {
-            src: 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4f9945d53dfc451da81cb3ebb.jpg',
-            w: 0,
-            h: 0
-        },
-        {
-            src: 'http://c.hiphotos.baidu.com/image/pic/item/4a36acaf2edda3ccd630465e02e93901203f92fc.jpg',
-            w: 0,
-            h: 0
-        }
-    ];
+//     var items = [
+//         {
+//             src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
+//             w: 0,
+//             h: 0
+//         },
+//         {
+//             src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
+//             w: 0,
+//             h: 0
+//         },
+//         {
+//             src: 'http://f.hiphotos.baidu.com/image/pic/item/64380cd7912397dd1c8f01055b82b2b7d0a28739.jpg',
+//             w: 0,
+//             h: 0
+//         },
+//         {
+//             src: 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4f9945d53dfc451da81cb3ebb.jpg',
+//             w: 0,
+//             h: 0
+//         },
+//         {
+//             src: 'http://c.hiphotos.baidu.com/image/pic/item/4a36acaf2edda3ccd630465e02e93901203f92fc.jpg',
+//             w: 0,
+//             h: 0
+//         }
+//     ];
     
     // define options (if needed)
     var options = {
@@ -145,5 +191,6 @@ var openPhotoSwipe = function() {
 //window.onload(openPhotoSwipe());
 openPhotoSwipe();
 </script>
+
 </body>
 </html>
