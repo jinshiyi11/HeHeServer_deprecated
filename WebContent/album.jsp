@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="java.io.*" %>
+<%@page import="java.net.*" %>
+<%@page import="java.lang.reflect.*" %>
+<%@page import="com.google.gson.reflect.*" %>
 <%@ page import="com.shuai.hehe.server.data.*" %>
+<%@ page import="com.shuai.hehe.util.*" %>
 <%@ page import="java.util.*"%>
 <%@ page import="com.google.gson.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -101,6 +106,7 @@ var openPhotoSwipe = function() {
     var pswpElement = document.querySelectorAll('.pswp')[0];
     <%!
     private static class Pic {
+      private int id;
       private String src;
       private int w;
       private int h;
@@ -115,8 +121,13 @@ try {
     return;
 }
 
-DataManager mDataManager=new DataManager();
-ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
+String json=HttpUtil.getData("http://hehedream.duapp.com/getalbumpics?feedid=15182&ver=1.3&channel=default");
+Gson dataGson=new Gson();
+Type type = new TypeToken<ArrayList<PicInfo>>(){}.getType();
+ArrayList<PicInfo> data=dataGson.fromJson(json, type);
+
+//DataManager mDataManager=new DataManager();
+//ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
 ArrayList<Pic> pics=new ArrayList<Pic>();
 for(PicInfo item :data){
 	Pic pic=new Pic();
