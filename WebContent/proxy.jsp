@@ -71,7 +71,7 @@ public static class RateMeter {
 
 }
 
-private String PROXY_REFERER = "http://localhost/proxy.jsp";
+private String PROXY_REFERER = null;
 private static String DEFAULT_OAUTH = "https://www.arcgis.com/sharing/oauth2/";
 private static int CLEAN_RATEMAP_AFTER = 10000;
 
@@ -160,7 +160,9 @@ private HttpURLConnection doHTTPRequest(String uri, byte[] bytes, String method,
     con.setConnectTimeout(5000);
     con.setReadTimeout(10000);
 
-    con.setRequestProperty("Referer", referer);
+    if(referer!=null && !referer.equals(""))
+    	con.setRequestProperty("Referer", referer);
+    
     con.setRequestMethod(method);
 
     if (bytes != null && bytes.length > 0 || method.equals("POST")) {
@@ -736,6 +738,12 @@ private static void _sendURLMismatchError(HttpServletResponse response) throws I
                 "403 - Forbidden: Access is denied.",HttpServletResponse.SC_FORBIDDEN);
 }
 %><%
+
+//System.setProperty("http.proxyHost", "localhost"); 
+//System.setProperty("http.proxyPort", "8888"); 
+//System.setProperty("https.proxyHost", "localhost"); 
+//System.setProperty("https.proxyPort", "8888"); 
+
 String uri = request.getQueryString();
 _log(Level.INFO,"Creating request for: " + uri);
 ServerUrl serverUrl;

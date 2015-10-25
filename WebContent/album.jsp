@@ -136,6 +136,13 @@ for(PicInfo item :data){
 }
 
 Gson gson=new Gson();
+int port=request.getServerPort();
+String portPart="";
+if(port!=80)
+	portPart=":"+port;
+String preUrl=request.getServerName()+portPart;
+
+request.getContextPath()
 out.write("var items ="+gson.toJson(pics));
 %>
     
