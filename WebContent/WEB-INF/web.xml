@@ -94,4 +94,14 @@
     <servlet-name>GetVideoUrl</servlet-name>
     <url-pattern>/get_video_url</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>UcLogin</display-name>
+    <servlet-name>UcLogin</servlet-name>
+    <servlet-class>com.anysdk.auth.UcLogin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UcLogin</servlet-name>
+    <url-pattern>/UcLogin</url-pattern>
+  </servlet-mapping>
 </web-app>
