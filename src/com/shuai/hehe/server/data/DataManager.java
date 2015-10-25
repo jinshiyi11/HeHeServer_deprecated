@@ -37,10 +37,11 @@ public class DataManager {
             mDbHost = "localhost";
             mDbPort = 3306;
         } else {
-            mDbName = "";
-            mDbUserName="";
-            mDbPassword="";
-            mDbHost="";
+//            mDbName = "";
+//            mDbUserName="";
+//            mDbPassword="";
+//            mDbHost="";
+
             mDbPort=4050;
         }
 
@@ -117,6 +118,29 @@ public class DataManager {
 
         closeConnection(connection);
     }
+    
+
+    public Feed getFeed(int feedId) throws SQLException {
+    	Feed feed=new Feed();
+    	Connection connection = getConnection();
+        String sql = "SELECT * FROM hot_feed WHERE id=?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1, feedId);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+
+        while (resultSet.next()) {
+        	feed.setId(resultSet.getInt("id"));
+        	feed.setType(resultSet.getInt("type"));
+            feed.setTitle(resultSet.getString("title"));
+            feed.setContent(resultSet.getString("content"));
+            feed.setFrom(resultSet.getInt("from"));
+            feed.setShowTime(resultSet.getTimestamp("show_time").getTime());
+        }
+        
+        closeConnection(connection);
+        return feed;
+    }
 
     /**
      * 返回的数据按时间排列，从新到旧
@@ -149,6 +173,7 @@ public class DataManager {
             sql = "SELECT id,type,title,content,`from`,insert_time,show_time FROM hot_feed WHERE state!=0 AND show_time<? ";
         }
 
+        //sql = sql + " AND type=" + FeedType.TYPE_ALBUM;
         if (version<Constants.VERSION_1_1) {
             sql = sql + " AND type=" + FeedType.TYPE_ALBUM;
         }else if(version<Constants.VERSION_1_3){
@@ -156,7 +181,6 @@ public class DataManager {
         }
 
         sql = sql + " ORDER BY show_time " + (count < 0 ? " DESC " : " ASC ") + " LIMIT ?";
-
         PreparedStatement statement = connection.prepareStatement(sql);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         statement.setString(1, simpleDateFormat.format(showTime));

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="height: 100%;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/pgwslideshow.css">
+<title>呵呵图片</title>
+</head>
+<body style="margin:0;height: 100%;">
+<li><img src="http://fmn.xnpic.com/fmn050/20101015/1805/p_large_v0np_0864000ba1695c40.jpg" alt="其实呆呆傻傻
+也没什么不好" onload="onImgLoaded(this)"/></li>
+
+<script type="text/javascript">
+		
+function onImgLoaded(img)
+{
+	//console.log("original size:"+img.width+","+img.height);
+	if(!img)
+		return;
+	
+	var screenWidth=document.body.clientWidth;
+	var screenHeight=document.body.clientHeight;
+	if(img.width/img.height>screenWidth/screenHeight){
+		img.style.width=screenWidth+'px';
+		//img.width=screenWidth;	
+	}else{
+		img.style.height=screenHeight + 'px';
+		//img.height=screenHeight;
+	}
+	
+	//console.log("result size:"+img.width+","+img.height);
+}
+	</script>
+</body>
+</html>

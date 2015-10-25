@@ -160,8 +160,8 @@ private HttpURLConnection doHTTPRequest(String uri, byte[] bytes, String method,
     con.setConnectTimeout(5000);
     con.setReadTimeout(10000);
 
-    if(referer!=null && !referer.equals(""))
-    	con.setRequestProperty("Referer", referer);
+//    if(referer!=null && !referer.equals(""))
+//    	con.setRequestProperty("Referer", referer);
     
     con.setRequestMethod(method);
 

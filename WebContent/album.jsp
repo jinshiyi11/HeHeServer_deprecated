@@ -16,6 +16,23 @@
 <meta name="viewport" content="width=device-width, user-scalable=no"/>
 <link rel="stylesheet" href="css/photoswipe.css">
 <link rel="stylesheet" href="css/default-skin/default-skin.css">
+<style type="text/css">
+.pswp__counter{
+font-size: 14px;
+width: 100%;
+margin: 0 auto;
+text-align: center;
+}
+
+.pswp__caption{
+background-color: rgba(0,0,0,0.2);
+}
+
+.pswp__caption__center{
+font-size: 14px;
+}
+
+</style>
 <script src="js/photoswipe.min.js"></script>
 <script src="js/photoswipe-ui-default.min.js"></script>
 <script>
@@ -110,6 +127,7 @@ var openPhotoSwipe = function() {
       private String src;
       private int w;
       private int h;
+      private String title;
     }
     %>
 <%
@@ -121,28 +139,22 @@ try {
     return;
 }
 
-String json=HttpUtil.getData("http://hehedream.duapp.com/getalbumpics?feedid=15182&ver=1.3&channel=default");
-Gson dataGson=new Gson();
-Type type = new TypeToken<ArrayList<PicInfo>>(){}.getType();
-ArrayList<PicInfo> data=dataGson.fromJson(json, type);
+//String json=HttpUtil.getData("http://hehedream.duapp.com/getalbumpics?feedid=15182&ver=1.3&channel=default");
+//Gson dataGson=new Gson();
+//Type type = new TypeToken<ArrayList<PicInfo>>(){}.getType();
+//ArrayList<PicInfo> data=dataGson.fromJson(json, type);
 
-//DataManager mDataManager=new DataManager();
-//ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
+DataManager mDataManager=new DataManager();
+ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
 ArrayList<Pic> pics=new ArrayList<Pic>();
 for(PicInfo item :data){
 	Pic pic=new Pic();
-	pic.src=item.getBigPicUrl();
+	pic.src="proxy.jsp?"+item.getBigPicUrl();
+	pic.title=item.getPicDescription();
 	pics.add(pic);
 }
 
 Gson gson=new Gson();
-int port=request.getServerPort();
-String portPart="";
-if(port!=80)
-	portPart=":"+port;
-String preUrl=request.getServerName()+portPart;
-
-request.getContextPath()
 out.write("var items ="+gson.toJson(pics));
 %>
     
@@ -182,7 +194,12 @@ out.write("var items ="+gson.toJson(pics));
         focus: false,
 
         showAnimationDuration: 0,
-        hideAnimationDuration: 0
+        hideAnimationDuration: 0,
+        closeEl:false,
+        captionEl: true,
+        fullscreenEl: false,
+        zoomEl: true,
+        shareEl: false
         
     };
     
