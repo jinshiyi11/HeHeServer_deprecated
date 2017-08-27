@@ -55,6 +55,7 @@ public class GetAlbumPics extends HttpServlet {
 	
 	private void getAlbumPics(HttpServletRequest request, HttpServletResponse response) throws IOException{
 	    response.setContentType("text/html; charset=UTF-8");
+	    response.setHeader("Access-Control-Allow-Origin", "*");
 	    
         int feedId;
         try {

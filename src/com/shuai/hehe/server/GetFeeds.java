@@ -69,6 +69,7 @@ public class GetFeeds extends HttpServlet {
 	
 	private void getData(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		response.setContentType("text/html; charset=UTF-8");
+		response.setHeader("Access-Control-Allow-Origin", "*");  
 		
 		/**
 		 * 客户端是否应该缓存返回的数据

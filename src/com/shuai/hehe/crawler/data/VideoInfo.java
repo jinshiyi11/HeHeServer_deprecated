@@ -4,6 +4,7 @@ package com.shuai.hehe.crawler.data;
  *
  */
 public class VideoInfo {
+	public String mVideoId;
 	/**
 	 * 视频名
 	 */
@@ -23,15 +24,23 @@ public class VideoInfo {
      * 视频对应的web页面，该页面不仅包含视频还包含评论，广告等其它东西
      */
     public String mWebVideoUrl;
+    
+    /**
+     * 视频地址，如MP4文件的地址
+     */
+    public String mVideoUrl;
 	
 	/**
 	 * 新鲜事来源
 	 */
 	public int mFromType=FromType.FROM_RENREN;
-	
+
 	@Override
-    public String toString() {
-        return "video=mTitle:"+mTitle+"\n";
-    }
+	public String toString() {
+		return "VideoInfo [mTitle=" + mTitle + ", mVideoThumbUrl="
+				+ mVideoThumbUrl + ", mFlashVideoUrl=" + mFlashVideoUrl
+				+ ", mWebVideoUrl=" + mWebVideoUrl + ", mFromType=" + mFromType
+				+ "]";
+	}
 
 }

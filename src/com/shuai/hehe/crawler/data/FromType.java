@@ -18,5 +18,10 @@ public class FromType {
 	public static int FROM_FACEBOOK=5;
 	public static int FROM_GOOGLE=6;
 	public static int FROM_TWITTER=7;
+	
+	/**
+	 * 来自阳光宽屏网
+	 */
+	public static int FROM_365YG=8;
 
 }
