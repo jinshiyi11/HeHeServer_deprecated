@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.shuai.hehe.crawler.CrawlerMananger;
+import com.shuai.hehe.server.data.Constants;
 
 /**
  * Servlet implementation class Crawler
@@ -49,9 +50,18 @@ public class Crawler extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		// TODO:同步问题，安全检查
 		response.setContentType("text/html; charset=UTF-8");
-		response.setHeader("Access-Control-Allow-Origin", "*"); 
-		
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		String action = request.getParameter("action");
+
+		if ("start".equals(action) || "stop".equals(action)) {
+			String sessionKey = request.getParameter(Constants.ADMIN_KEY_NAME);
+			if (sessionKey == null
+					|| !sessionKey.equals(Constants.ADMIN_KEY_VALUE)) {
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				return;
+			}
+		}
+
 		CrawlerMananger crawler = (CrawlerMananger) request.getServletContext()
 				.getAttribute("crawler");
 		if (action == null || action.equals("") || action.equals("start")) {
@@ -77,7 +87,7 @@ public class Crawler extends HttpServlet {
 				}
 
 				CrawlerMananger.LogInfo logInfo = crawler.getLog(start);
-				Gson gson=new Gson();
+				Gson gson = new Gson();
 				response.getWriter().write(gson.toJson(logInfo));
 			}
 		} else {

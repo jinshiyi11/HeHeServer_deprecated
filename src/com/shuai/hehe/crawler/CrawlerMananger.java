@@ -58,7 +58,7 @@ public class CrawlerMananger implements ICrawlerCallback {
 			}
 		});
 
-		mPicCrawler = new PicCrawler("http://share.renren.com/albumlist/10651",
+		mPicCrawler = new PicCrawler("http://share.renren.com/albumlist/265051",
 				this);
 		mExecutor.execute(new Runnable() {
 			@Override

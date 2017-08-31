@@ -31,11 +31,6 @@ public class YgVideoCrawler {
 	 */
 	private int mVideoCount;
 
-	/**
-	 * 已经爬过的页面数
-	 */
-	private int mPageCount;
-
 	private boolean mStop;
 
 	private ICrawlerCallback mCrawlerCallback;
@@ -64,11 +59,12 @@ public class YgVideoCrawler {
 				for (YgVideoInfo item : videos) {
 					mCrawlerCallback.addLog(item.toString());
 					mCrawlerCallback.addVideo(convert2VideoInfo(item));
+					mVideoCount++;
 				}
 				long time = videos.get(videos.size() - 1).getHotTime();
 				url = String.format(YgVideoCrawler.URL_FORMAT, time);
 			}
-		} while (videos != null && videos.size() > 0);
+		} while (videos != null && videos.size() > 0 && mVideoCount<MAX_VIDEO_COUNT);
 
 		mCrawlerCallback.addLog("video crawler finished!!");
 	}
@@ -97,11 +93,6 @@ public class YgVideoCrawler {
 		}
 
 		mCrawlerCallback.addLog(String.format("正在爬取视频列表，url:%s", url));
-
-		++mPageCount;
-
-		// if (mPageCount > 10)
-		// return;
 
 		try {
 			;

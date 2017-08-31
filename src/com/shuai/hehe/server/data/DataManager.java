@@ -38,7 +38,7 @@ public class DataManager {
     private int mDbPort;
 
 	private long mShowTime=System.currentTimeMillis();
-	public long mShowTimeStep=30*60*1000;
+	public long mShowTimeStep=6*60*1000;
 	
     private static String mDriverName = "com.mysql.jdbc.Driver";//"org.sqlite.JDBC"
 
@@ -397,6 +397,11 @@ public class DataManager {
             // TODO Auto-generated catch block
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
+        }
+        
+        long minTime=System.currentTimeMillis()-24*60*60*1000;
+        if(mShowTime<minTime){
+        	mShowTime=minTime;
         }
 	    
 	}

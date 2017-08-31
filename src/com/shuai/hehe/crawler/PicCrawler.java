@@ -35,7 +35,7 @@ public class PicCrawler {
 	
 	private boolean mStop; 
 	
-	private static int MAX_ALBUM_COUNT=9000;
+	private static int MAX_ALBUM_COUNT=100;
 	
 	private ICrawlerCallback mCrawlerCallback;
 	
@@ -132,17 +132,14 @@ public class PicCrawler {
                 String thumbUrl = img.attr("src");
                 if (href.startsWith("http://share.renren.com/")) {
                     //mCrawlerCallback.addLog(title+href);
-                    //mCrawlerCallback.addLog("count:" + ++mAlbumCount);
-                    
-                    mCrawlerCallback.getExecutor().execute(new SubPicCrawler(href, title, thumbUrl));
-                    
-                    if(mAlbumCount>=MAX_ALBUM_COUNT)
-                        return null;
+                	mAlbumCount++;
+                    mCrawlerCallback.getExecutor().execute(new SubPicCrawler(href, title, thumbUrl));     
                 }
-
             }
-			
 
+            if(mAlbumCount>=MAX_ALBUM_COUNT){
+                return null;
+            }
 			Elements elements = doc.select(".pagerpro a[title=下一页]");
 			// check element count,==1.if >1 ?
 			if (elements.size() > 0) {

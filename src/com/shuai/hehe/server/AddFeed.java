@@ -35,6 +35,7 @@ public class AddFeed extends BaseServlet {
 		String sessionKey=request.getParameter(Constants.ADMIN_KEY_NAME);
 		if (sessionKey == null || !sessionKey.equals(Constants.ADMIN_KEY_VALUE)) {
 			response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+			return;
 		}
 		
 		int feedType=Integer.parseInt(request.getParameter("feedtype"));
