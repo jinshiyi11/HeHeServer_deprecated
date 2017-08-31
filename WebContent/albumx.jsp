@@ -22,7 +22,7 @@
 }
 </style>
 <%
-DataManager mDataManager=new DataManager();
+DataManager mDataManager=DataManager.getInstance();
 int feedId;
 try {
     feedId = Integer.parseInt(request.getParameter("feedid"));

@@ -45,8 +45,7 @@ public class InitEnv extends HttpServlet {
 		}
 		
 		try {
-			DataManager dataManager=new DataManager();
-			dataManager.createDb();
+			DataManager.getInstance();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

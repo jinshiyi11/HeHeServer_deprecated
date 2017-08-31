@@ -26,16 +26,6 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>PrimeSearcher</display-name>
-    <servlet-name>PrimeSearcher</servlet-name>
-    <servlet-class>com.shuai.hehe.server.PrimeSearcher</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PrimeSearcher</servlet-name>
-    <url-pattern>/primesearcher</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>AddFeed</display-name>
     <servlet-name>AddFeed</servlet-name>
     <servlet-class>com.shuai.hehe.server.AddFeed</servlet-class>

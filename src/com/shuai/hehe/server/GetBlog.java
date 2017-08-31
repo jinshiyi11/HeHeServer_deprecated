@@ -2,7 +2,6 @@ package com.shuai.hehe.server;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +12,6 @@ import com.google.gson.Gson;
 import com.shuai.hehe.server.data.BlogInfo;
 import com.shuai.hehe.server.data.Constants;
 import com.shuai.hehe.server.data.DataManager;
-import com.shuai.hehe.server.data.PicInfo;
 
 /**
  * Servlet implementation class GetBlogContent
@@ -35,7 +33,7 @@ public class GetBlog extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         
-        mDataManager=new DataManager();
+        mDataManager=DataManager.getInstance();
     }
 
 	/**

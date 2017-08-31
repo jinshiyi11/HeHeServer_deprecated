@@ -12,10 +12,10 @@ import org.apache.http.impl.client.HttpClients;
 
 import com.google.gson.Gson;
 import com.shuai.hehe.crawler.data.AlbumInfo;
-import com.shuai.hehe.crawler.data.BlogInfo;
 import com.shuai.hehe.crawler.data.Constants;
-import com.shuai.hehe.crawler.data.FeedType;
+import com.shuai.hehe.crawler.data.CrawlerBlogInfo;
 import com.shuai.hehe.crawler.data.VideoInfo;
+import com.shuai.hehe.server.data.FeedType;
 
 /**
  * 将爬到的数据传到服务器上
@@ -48,7 +48,7 @@ public class FeedUploader {
 		    feedType=FeedType.TYPE_ALBUM;
 		}else if(info.getClass()==VideoInfo.class){
 		    feedType=FeedType.TYPE_VIDEO;
-		}else if(info.getClass()==BlogInfo.class){
+		}else if(info.getClass()==CrawlerBlogInfo.class){
 		    feedType=FeedType.TYPE_BLOG;
 		}else{
 		    throw new InvalidParameterException("feed type invalid!");

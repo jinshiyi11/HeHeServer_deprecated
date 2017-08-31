@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.shuai.hehe.crawler.data.AlbumInfo;
-import com.shuai.hehe.crawler.data.BlogInfo;
-import com.shuai.hehe.crawler.data.DataManager;
+import com.shuai.hehe.crawler.data.CrawlerBlogInfo;
 import com.shuai.hehe.crawler.data.VideoInfo;
 import com.shuai.hehe.server.data.Constants;
+import com.shuai.hehe.server.data.DataManager;
 import com.shuai.hehe.server.data.FeedType;
 
 /**
@@ -57,7 +57,7 @@ public class AddFeed extends BaseServlet {
 		case FeedType.TYPE_BLOG:
 		{
 			Gson gson=new Gson();
-			BlogInfo feed = gson.fromJson(data, BlogInfo.class);
+			CrawlerBlogInfo feed = gson.fromJson(data, CrawlerBlogInfo.class);
 			DataManager.getInstance().addBlog(feed);
 			break;
 		}

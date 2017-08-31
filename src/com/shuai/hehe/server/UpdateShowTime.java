@@ -44,7 +44,7 @@ public class UpdateShowTime extends HttpServlet {
             return;
         }
         
-	    mDataManager=new DataManager();
+	    mDataManager=DataManager.getInstance();
 	    try {
             mDataManager.updateShowTime(response);
         } catch (SQLException e) {

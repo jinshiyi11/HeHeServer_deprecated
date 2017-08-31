@@ -1,7 +1,6 @@
 package com.shuai.hehe.server;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +24,7 @@ public class HideFeed extends HttpServlet {
     public HideFeed() {
         super();
         
-        mDataManager=new DataManager();
+        mDataManager= DataManager.getInstance();
     }
 
 	/**

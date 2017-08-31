@@ -3,7 +3,7 @@ package com.shuai.hehe.crawler.data;
 /**
  * 日志信息
  */
-public class BlogInfo {
+public class CrawlerBlogInfo {
 
     /**
      * 日志标题

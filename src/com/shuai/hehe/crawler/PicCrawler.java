@@ -1,7 +1,6 @@
 package com.shuai.hehe.crawler;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,10 +8,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.shuai.hehe.crawler.data.AlbumInfo;
-import com.shuai.hehe.crawler.data.AlbumInfo.PicInfo;
+import com.shuai.hehe.crawler.data.AlbumInfo.CrawlerPicInfo;
 import com.shuai.hehe.crawler.data.Constants;
-import com.shuai.hehe.crawler.data.DataManager;
 import com.shuai.hehe.crawler.data.FromType;
+import com.shuai.hehe.server.data.DataManager;
 
 /**
  * 热门相册爬虫
@@ -34,9 +33,11 @@ public class PicCrawler {
 	 */
 	private int mPageCount;
 	
+	private boolean mStop; 
+	
 	private static int MAX_ALBUM_COUNT=9000;
 	
-	private CrawlerMananger mCrawlerMananger=CrawlerMananger.getInstance();
+	private ICrawlerCallback mCrawlerCallback;
 	
     private class SubPicCrawler implements Runnable {
         String title;
@@ -51,24 +52,29 @@ public class PicCrawler {
 
         @Override
         public void run() {
+        	if(mStop){
+        		return;
+        	}
+        	
             Thread.currentThread().setName("SubPicCrawler");
             AlbumInfo albumInfo = getAlbumInfo(href, title, thumbUrl);
             if (albumInfo.mPics.size() == 0) {
                 System.err.println("empty album:"+albumInfo.mTitle);
             } else {
-                mCrawlerMananger.addAlbum(albumInfo);
+                mCrawlerCallback.addAlbum(albumInfo);
             }
         }
         
     }
 
-	public PicCrawler(String startUrl) {
+	public PicCrawler(String startUrl,ICrawlerCallback callback) {
 		mStartUrl = startUrl;
+		mCrawlerCallback = callback;
 	}
 
 	public void start() {
 	    String url=mStartUrl;
-        while (url!=null && url.length()>0) {
+        while (!mStop && url!=null && url.length()>0) {
             url=getAlbums(url);
             try {
                 Thread.sleep(1000);
@@ -77,7 +83,11 @@ public class PicCrawler {
             }
         }
         
-        System.out.println("pic crawler finished!!");
+        mCrawlerCallback.addLog("pic crawler finished!!");
+	}
+	
+	public void stop(){
+		mStop=true;
 	}
 
 	/**
@@ -92,7 +102,7 @@ public class PicCrawler {
 		if (url.isEmpty())
 			throw new IllegalArgumentException();
 		
-		System.out.println(String.format("正在爬取相册列表，url:%s",url));
+		mCrawlerCallback.addLog(String.format("正在爬取相册列表，url:%s",url));
 
 		++mPageCount;
 
@@ -108,7 +118,7 @@ public class PicCrawler {
 			// System.out.print(doc);
 			Elements items = doc.select(".share-hot-list .share.clearfix");
 			
-			System.out.println("pagecount:" + items.size());
+			//mCrawlerCallback.addLog("pagecount:" + items.size());
             for (Element element : items) {
                 Element link = element.select("h3 a[href]").get(0);
                 //TODO:check
@@ -121,11 +131,10 @@ public class PicCrawler {
                 Element img = element.select(".content .photos img").get(0);
                 String thumbUrl = img.attr("src");
                 if (href.startsWith("http://share.renren.com/")) {
-                    System.out.println(title);
-                    System.out.println(href);
-                    System.out.println("count:" + ++mAlbumCount);
+                    //mCrawlerCallback.addLog(title+href);
+                    //mCrawlerCallback.addLog("count:" + ++mAlbumCount);
                     
-                    mCrawlerMananger.getExecutor().execute(new SubPicCrawler(href, title, thumbUrl));
+                    mCrawlerCallback.getExecutor().execute(new SubPicCrawler(href, title, thumbUrl));
                     
                     if(mAlbumCount>=MAX_ALBUM_COUNT)
                         return null;
@@ -140,8 +149,8 @@ public class PicCrawler {
 				Element nextPageElement = elements.get(0);
 				String nextPageUrl = nextPageElement.attr("href");
 
-				// System.out.println();
-				// System.out.println();
+				// mCrawlerCallback.addLog();
+				// mCrawlerCallback.addLog();
 
 				return nextPageUrl;
 			}
@@ -164,12 +173,12 @@ public class PicCrawler {
         albumInfo.mAlbumThumbUrl = albumThumbUrl;
         albumInfo.mFromType = FromType.FROM_RENREN;
 
-        System.out.print(String.format("正在爬取相册图片\n相册名：%s\nurl:%s\n缩略图:%s\n", albumTitle, albumUrl, albumThumbUrl));
+        //System.out.print(String.format("正在爬取相册图片\n相册名：%s\nurl:%s\n缩略图:%s\n", albumTitle, albumUrl, albumThumbUrl));
         getAlbumPics(albumUrl, albumInfo);
         
         //从所有相册图片中查找相册封面缩略图对应的大图的url
         boolean found=false;
-        for (AlbumInfo.PicInfo picInfo : albumInfo.mPics) {
+        for (AlbumInfo.CrawlerPicInfo picInfo : albumInfo.mPics) {
             String bigUrl = picInfo.mBigImgUrl;
             if(isBigPicUrl(bigUrl, albumInfo.mAlbumThumbUrl)){
                 found=true;
@@ -183,7 +192,7 @@ public class PicCrawler {
             albumInfo.mAlbumPicUrl=albumInfo.mPics.get(0).mBigImgUrl;
         }
 
-        //System.out.println(String.format("相册:%s包含%d张图片", albumTitle, albumInfo.mPics.size()));
+        //mCrawlerCallback.addLog(String.format("相册:%s包含%d张图片", albumTitle, albumInfo.mPics.size()));
         return albumInfo;
 	}
 	
@@ -244,12 +253,12 @@ public class PicCrawler {
 					// 缩略图地址
 					String thumbPicUrl = thumbPic.attr("src");
 					
-//					System.out.println();
-//					System.out.println(picDescription);
-//					System.out.println(thumbPicUrl);
-//					System.out.println(bigPicUrl);
+//					mCrawlerCallback.addLog();
+//					mCrawlerCallback.addLog(picDescription);
+//					mCrawlerCallback.addLog(thumbPicUrl);
+//					mCrawlerCallback.addLog(bigPicUrl);
 					
-					PicInfo picInfo=new PicInfo();
+					CrawlerPicInfo picInfo=new CrawlerPicInfo();
 					picInfo.mThumbImgUrl=thumbPicUrl;
 					picInfo.mBigImgUrl=bigPicUrl;
 					picInfo.mDescription=picDescription;
@@ -267,8 +276,8 @@ public class PicCrawler {
 				Element nextPageElement = elements.get(0);
 				String nextPageUrl = nextPageElement.attr("href");
 
-				// System.out.println();
-				// System.out.println();
+				// mCrawlerCallback.addLog();
+				// mCrawlerCallback.addLog();
 
 				getAlbumPics(nextPageUrl,albumInfo);
 			}

@@ -29,12 +29,12 @@ public class AlbumInfo {
 	/**
 	 * 相册里面的相片
 	 */
-	public ArrayList<PicInfo> mPics=new ArrayList<AlbumInfo.PicInfo>();
+	public ArrayList<CrawlerPicInfo> mPics=new ArrayList<AlbumInfo.CrawlerPicInfo>();
 	
 	/**
 	 * 每个相片的信息
 	 */
-	public static class PicInfo{
+	public static class CrawlerPicInfo{
 		/**
 		 * 相片缩略图url
 		 */

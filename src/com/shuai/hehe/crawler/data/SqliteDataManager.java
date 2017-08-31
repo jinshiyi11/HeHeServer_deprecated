@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.google.gson.Gson;
-import com.shuai.hehe.crawler.data.AlbumInfo.PicInfo;
+import com.shuai.hehe.crawler.data.AlbumInfo.CrawlerPicInfo;
+import com.shuai.hehe.server.data.FeedType;
 
 public class SqliteDataManager {
 	
@@ -213,7 +214,7 @@ public class SqliteDataManager {
 			if(generatedKeys.next()){
 				long feed_id=generatedKeys.getLong(1);
 				
-				for (PicInfo pic : info.mPics) {
+				for (CrawlerPicInfo pic : info.mPics) {
 					sql=String.format("INSERT INTO pic(feed_id,thumb_url,big_url,description) values(%d,'%s','%s','%s')",feed_id,processStringForSqlite(pic.mThumbImgUrl),processStringForSqlite(pic.mBigImgUrl),processStringForSqlite(pic.mDescription));
 					statement.execute(sql);
 				}

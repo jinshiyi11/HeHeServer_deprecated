@@ -144,7 +144,10 @@ try {
 //Type type = new TypeToken<ArrayList<PicInfo>>(){}.getType();
 //ArrayList<PicInfo> data=dataGson.fromJson(json, type);
 
-DataManager mDataManager=new DataManager();
+
+DataManager mDataManager=DataManager.getInstance();
+Feed feed=mDataManager.getFeed(feedId);
+out.write("document.title='"+feed.getTitle()+"';");
 ArrayList<PicInfo> data = mDataManager.getAlbumPics(feedId);
 ArrayList<Pic> pics=new ArrayList<Pic>();
 for(PicInfo item :data){
@@ -159,33 +162,33 @@ out.write("var items ="+gson.toJson(pics));
 %>
     
     // build items array
-//     var items = [
-//         {
-//             src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
-//             w: 0,
-//             h: 0
-//         },
-//         {
-//             src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
-//             w: 0,
-//             h: 0
-//         },
-//         {
-//             src: 'http://f.hiphotos.baidu.com/image/pic/item/64380cd7912397dd1c8f01055b82b2b7d0a28739.jpg',
-//             w: 0,
-//             h: 0
-//         },
-//         {
-//             src: 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4f9945d53dfc451da81cb3ebb.jpg',
-//             w: 0,
-//             h: 0
-//         },
-//         {
-//             src: 'http://c.hiphotos.baidu.com/image/pic/item/4a36acaf2edda3ccd630465e02e93901203f92fc.jpg',
-//             w: 0,
-//             h: 0
-//         }
-//     ];
+    // var items = [
+        // {
+            // src: 'https://farm2.staticflickr.com/1043/5186867718_06b2e9e551_b.jpg',
+            // w: 0,
+            // h: 0
+        // },
+        // {
+            // src: 'https://farm7.staticflickr.com/6175/6176698785_7dee72237e_b.jpg',
+            // w: 0,
+            // h: 0
+        // },
+        // {
+            // src: 'http://f.hiphotos.baidu.com/image/pic/item/64380cd7912397dd1c8f01055b82b2b7d0a28739.jpg',
+            // w: 0,
+            // h: 0
+        // },
+        // {
+            // src: 'http://c.hiphotos.baidu.com/image/pic/item/a5c27d1ed21b0ef4f9945d53dfc451da81cb3ebb.jpg',
+            // w: 0,
+            // h: 0
+        // },
+        // {
+            // src: 'http://c.hiphotos.baidu.com/image/pic/item/4a36acaf2edda3ccd630465e02e93901203f92fc.jpg',
+            // w: 0,
+            // h: 0
+        // }
+    // ];
     
     // define options (if needed)
     var options = {
@@ -213,7 +216,7 @@ out.write("var items ="+gson.toJson(pics));
             img.onload = function() { // will get size after load
                 item.w = this.width; // set image width
                 item.h = this.height; // set image height
-               gallery.invalidateCurrItems(); // reinit Items
+               //gallery.invalidateCurrItems(); // reinit Items
                gallery.updateSize(true); // reinit Items
             }
             img.src = item.src; // let's download image
